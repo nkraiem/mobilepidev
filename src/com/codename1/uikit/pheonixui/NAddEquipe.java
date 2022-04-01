@@ -1,0 +1,144 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.codename1.uikit.pheonixui;
+
+import com.codename1.sport.entities.Equipe;
+import com.codename1.sport.entities.Publication;
+import com.codename1.sport.services.ServiceEquipe;
+import com.codename1.sport.services.ServicesPublications;
+import com.codename1.sport.utils.Statics;
+import com.codename1.ui.Command;
+import static com.codename1.ui.Component.CENTER;
+import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
+import com.codename1.ui.FontImage;
+import com.codename1.ui.Image;
+import com.codename1.ui.Label;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.util.Resources;
+
+
+public class NAddEquipe extends BaseForm {
+    
+    
+    private com.codename1.ui.Container gui_Container_1 = new com.codename1.ui.Container(new com.codename1.ui.layouts.BoxLayout(com.codename1.ui.layouts.BoxLayout.Y_AXIS));
+
+    private com.codename1.ui.ComponentGroup gui_Component_Group_1 = new com.codename1.ui.ComponentGroup();
+    private com.codename1.ui.Label nomLabel = new com.codename1.ui.Label();
+   
+    
+    
+
+    private com.codename1.ui.TextField nomText = new com.codename1.ui.TextField("", "nom");
+    
+    
+    
+   
+     protected Label lblimage=new Label();
+     private com.codename1.ui.Button btnconfirmer = new com.codename1.ui.Button();
+   
+    
+    
+    public NAddEquipe() {
+        this(com.codename1.ui.util.Resources.getGlobalResources());
+    }
+
+    public NAddEquipe(com.codename1.ui.util.Resources resourceObjectInstance) {
+       initGuiBuilderComponents(resourceObjectInstance);      
+       
+        installSidemenu(resourceObjectInstance);
+        getToolbar().addMaterialCommandToRightBar("", FontImage.MATERIAL_PUBLIC, e -> {});
+        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, ev -> {
+            new NEquipes().show();
+        });
+    }
+
+    private void initGuiBuilderComponents(Resources resourceObjectInstance) {
+         setLayout(new com.codename1.ui.layouts.BorderLayout());
+        setTitle("Ajouter Equipe");
+        setName("AjoutForm");
+        addComponent(com.codename1.ui.layouts.BorderLayout.CENTER, gui_Container_1);
+        gui_Container_1.setScrollableY(true);
+        gui_Container_1.setName("Container_1");
+        //gui_Container_1.addComponent(gui_Label_1);
+        gui_Container_1.addComponent(gui_Component_Group_1);
+
+        Container c1 = new Container(new FlowLayout(CENTER, CENTER));
+        Container c2 = new Container(new FlowLayout(CENTER, CENTER));
+        Container c3 = new Container(new FlowLayout(CENTER, CENTER));
+        Container c4 = new Container(new FlowLayout(CENTER, CENTER));
+        
+        
+Image image = resourceObjectInstance.getImage("equipe.jpg");
+image.fill(100,100);
+
+
+        c1.add(image);
+       
+        
+        
+        nomLabel.setText("Nom");
+        
+        
+        c2.addComponent(nomLabel);
+        c2.addComponent(nomText);
+       
+        
+        
+        
+       
+        gui_Component_Group_1.setName("Component_Group_1");
+        gui_Component_Group_1.addComponent(c1);
+        gui_Component_Group_1.addComponent(c2);
+        
+
+        btnconfirmer.setText("Confirmer");
+        btnconfirmer.setName("btnPubli");
+        gui_Container_1.addComponent(btnconfirmer);
+        
+
+        gui_Component_Group_1.setName("Component_Group_1");
+        
+        
+        btnconfirmer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if (!nomText.getText().isEmpty()  ) {
+                   
+                        Equipe equipe = new Equipe();
+                        equipe.setNom(nomText.getText());
+                       
+                        
+                        
+                        
+
+                        ServiceEquipe su = ServiceEquipe.getInstance();
+
+                        if (su.add(equipe)) {
+                            Dialog.show("Equipe", "Equipe ajoutée", new Command("OK"));
+                            new NEquipes().show();
+                        } else {
+                            Dialog.show("Equipe", "Erreur d'ajout", new Command("OK"));
+                        }
+                        new NEquipes().show();
+                   
+
+                } else {
+                    Dialog.show("Equipe", "Les champs ne doivent pas être vide", new Command("OK"));
+                }
+            }
+        });
+
+    }
+    
+    @Override
+    protected boolean isCurrentEquipe() {
+        return true;
+    }
+    
+}
